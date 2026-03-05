@@ -145,61 +145,40 @@
       display: none;
       flex: 1;
       overflow: hidden;
-      flex-direction: column;
+      flex-direction: row;
+      /* 분할 화면을 위한 가로 배치 */
     }
 
     .view.active {
       display: flex;
     }
 
-    /* TABS */
-    .tabs {
-      display: flex;
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-
-    .tab {
+    /* LEFT SIDE: REGISTRATION */
+    .left-side {
       flex: 1;
-      padding: 14px;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      transition: var(--tr);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+      background: var(--bg2);
     }
 
-    .tab.on {
-      color: var(--teal);
-      border-bottom-color: var(--teal);
+    /* RIGHT SIDE: STATUS/BOARD */
+    .right-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
     }
 
-    .tab i {
-      font-size: 16px;
-    }
-
-    /* PANELS */
+    /* PANELS (Split Screen Use) */
     .panel {
-      display: none;
       flex: 1;
       overflow-y: auto;
       padding: 24px;
+      display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-    }
-
-    .panel.on {
-      display: flex;
     }
 
     /* FORM */
@@ -427,6 +406,106 @@
       text-align: center;
       padding: 20px;
       font-size: 15px;
+    }
+
+    .list-board {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      overflow: hidden;
+    }
+
+    .board-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .board-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-right: 8px;
+    }
+
+    .board-item {
+      background: var(--card);
+      border-left: 4px solid var(--teal);
+      border-radius: var(--r);
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .board-item.called {
+      border-left-color: var(--gold);
+      background: rgba(255, 214, 10, 0.05);
+    }
+
+    .bi-num {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--text);
+      width: 50px;
+    }
+
+    .bi-info {
+      flex: 1;
+    }
+
+    .bi-phone {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .bi-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .bi-status {
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .bi-status.waiting {
+      background: rgba(76, 201, 240, 0.15);
+      color: var(--teal);
+    }
+
+    .bi-status.called {
+      background: rgba(255, 214, 10, 0.2);
+      color: var(--gold);
+      animation: pulse 1.5s infinite;
+    }
+
+    .btn-seat-small {
+      padding: 6px 14px;
+      background: rgba(6, 214, 160, 0.15);
+      border: 1px solid rgba(6, 214, 160, 0.3);
+      border-radius: 6px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--tr);
+    }
+
+    .btn-seat-small:active {
+      transform: scale(0.95);
     }
 
     /* STAFF TOOLBAR */
@@ -933,6 +1012,17 @@
     }
 
     /* RESPONSIVE */
+    @media(max-width:900px) {
+      .view {
+        flex-direction: column;
+      }
+
+      .left-side {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+
     @media(max-width:600px) {
       .hd-stats {
         gap: 12px;
@@ -990,546 +1080,472 @@
       <div class="staff-tap" id="staff-tap" title="직원 모드"></div>
     </div>
 
-    <!-- CUSTOMER VIEW -->
+    <!-- CUSTOMER VIEW (Split Screen) -->
     <div class="view active" id="customer-view">
-      <div class="tabs">
-        <button class="tab on" id="tab-reg" onclick="switchTab('reg')">
-          <i class="fa-solid fa-plus-circle"></i> 대기 등록
-        </button>
-        <button class="tab" id="tab-chk" onclick="switchTab('chk')">
-          <i class="fa-solid fa-magnifying-glass"></i> 순서 확인
-        </button>
-      </div>
 
-      <!-- REGISTER PANEL -->
-      <div class="panel on" id="panel-reg">
-        <div class="form-box">
-          <div class="form-h">대기 등록</div>
-          <div class="form-hint">이름과 전화번호를 입력하고 대기 등록을 눌러주세요.</div>
-          <div class="fg">
-            <label class="fl">이름 (선택)</label>
-            <input class="fi" type="text" id="reg-name" placeholder="예) 김철수" maxlength="20">
-          </div>
-          <div class="fg">
-            <label class="fl">전화번호</label>
-            <div class="phone-disp empty" id="reg-phone-disp">번호를 입력해 주세요</div>
-            <div class="numpad" id="reg-numpad">
-              <button class="nkey" onclick="numpadInput('1','reg')">1</button>
-              <button class="nkey" onclick="numpadInput('2','reg')">2</button>
-              <button class="nkey" onclick="numpadInput('3','reg')">3</button>
-              <button class="nkey" onclick="numpadInput('4','reg')">4</button>
-              <button class="nkey" onclick="numpadInput('5','reg')">5</button>
-              <button class="nkey" onclick="numpadInput('6','reg')">6</button>
-              <button class="nkey" onclick="numpadInput('7','reg')">7</button>
-              <button class="nkey" onclick="numpadInput('8','reg')">8</button>
-              <button class="nkey" onclick="numpadInput('9','reg')">9</button>
-              <button class="nkey clr" onclick="numpadInput('clear','reg')">전체삭제</button>
-              <button class="nkey" onclick="numpadInput('0','reg')">0</button>
-              <button class="nkey del" onclick="numpadInput('del','reg')"><i
-                  class="fa-solid fa-delete-left"></i></button>
+      <!-- LEFT SIDE: REGISTER -->
+      <div class="left-side">
+        <div class="panel">
+          <div class="form-box">
+            <div class="form-h">대기 등록</div>
+            <div class="form-hint">전화번호를 입력하고 대기 등록을 눌러주세요.</div>
+            <div class="fg">
+              <label class="fl">전화번호</label>
+              <div class="phone-disp empty" id="reg-phone-disp">번호를 입력해 주세요</div>
+              <div class="numpad" id="reg-numpad">
+                <button class="nkey" onclick="numpadInput('1','reg')">1</button>
+                <button class="nkey" onclick="numpadInput('2','reg')">2</button>
+                <button class="nkey" onclick="numpadInput('3','reg')">3</button>
+                <button class="nkey" onclick="numpadInput('4','reg')">4</button>
+                <button class="nkey" onclick="numpadInput('5','reg')">5</button>
+                <button class="nkey" onclick="numpadInput('6','reg')">6</button>
+                <button class="nkey" onclick="numpadInput('7','reg')">7</button>
+                <button class="nkey" onclick="numpadInput('8','reg')">8</button>
+                <button class="nkey" onclick="numpadInput('9','reg')">9</button>
+                <button class="nkey clr" onclick="numpadInput('clear','reg')">전체삭제</button>
+                <button class="nkey" onclick="numpadInput('0','reg')">0</button>
+                <button class="nkey del" onclick="numpadInput('del','reg')"><i
+                    class="fa-solid fa-delete-left"></i></button>
+              </div>
             </div>
-          </div>
-          <div class="fg">
-            <label class="fl">인원</label>
-            <div class="party-grid" id="party-grid">
-              <button class="pbtn on" data-n="1" onclick="selectParty(1)">1명</button>
-              <button class="pbtn" data-n="2" onclick="selectParty(2)">2명</button>
-              <button class="pbtn" data-n="3" onclick="selectParty(3)">3명</button>
-              <button class="pbtn" data-n="4" onclick="selectParty(4)">4명</button>
-              <button class="pbtn" data-n="5" onclick="selectParty(5)">5명</button>
-              <button class="pbtn" data-n="6" onclick="selectParty(6)">6+</button>
+            <div class="fg">
+              <label class="fl">인원</label>
+              <div class="party-grid" id="party-grid">
+                <button class="pbtn on" data-n="1" onclick="selectParty(1)">1명</button>
+                <button class="pbtn" data-n="2" onclick="selectParty(2)">2명</button>
+                <button class="pbtn" data-n="3" onclick="selectParty(3)">3명</button>
+                <button class="pbtn" data-n="4" onclick="selectParty(4)">4명</button>
+                <button class="pbtn" data-n="5" onclick="selectParty(5)">5명</button>
+                <button class="pbtn" data-n="6" onclick="selectParty(6)">6+</button>
+              </div>
             </div>
+            <button class="btn-p red" onclick="doRegister()">
+              <i class="fa-solid fa-ticket"></i> 대기 등록하기
+            </button>
           </div>
-          <button class="btn-p red" onclick="doRegister()">
-            <i class="fa-solid fa-ticket"></i> 대기 등록하기
-          </button>
         </div>
       </div>
 
-      <!-- CHECK PANEL -->
-      <div class="panel" id="panel-chk">
-        <div class="form-box">
-          <div class="form-h">순서 확인</div>
-          <div class="form-hint">전화번호를 입력하면 현재 대기 순서를 알려드립니다.</div>
-          <div class="fg">
-            <label class="fl">전화번호</label>
-            <div class="phone-disp empty" id="chk-phone-disp">번호를 입력해 주세요</div>
-            <div class="numpad">
-              <button class="nkey" onclick="numpadInput('1','chk')">1</button>
-              <button class="nkey" onclick="numpadInput('2','chk')">2</button>
-              <button class="nkey" onclick="numpadInput('3','chk')">3</button>
-              <button class="nkey" onclick="numpadInput('4','chk')">4</button>
-              <button class="nkey" onclick="numpadInput('5','chk')">5</button>
-              <button class="nkey" onclick="numpadInput('6','chk')">6</button>
-              <button class="nkey" onclick="numpadInput('7','chk')">7</button>
-              <button class="nkey" onclick="numpadInput('8','chk')">8</button>
-              <button class="nkey" onclick="numpadInput('9','chk')">9</button>
-              <button class="nkey clr" onclick="numpadInput('clear','chk')">전체삭제</button>
-              <button class="nkey" onclick="numpadInput('0','chk')">0</button>
-              <button class="nkey del" onclick="numpadInput('del','chk')"><i
-                  class="fa-solid fa-delete-left"></i></button>
-            </div>
+      <!-- RIGHT SIDE: LIVE BOARD -->
+      <div class="right-side">
+        <div class="list-board">
+          <div class="board-title">
+            <i class="fa-solid fa-list-ol"></i> 현재 대기 현황
           </div>
-          <button class="btn-p teal" onclick="doCheck()">
-            <i class="fa-solid fa-magnifying-glass"></i> 확인하기
+          <div class="board-list" id="board-list-body">
+            <!-- JS 렌더링 영역 -->
+          </div>
+
+          <div class="empty" id="board-empty" style="display:none; padding-top:40px;">
+            <i class="fa-solid fa-mug-hot"></i>
+            <p>바로 입장 가능합니다.</p>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- STAFF VIEW -->
+      <div class="view" id="staff-view">
+        <div class="staff-bar">
+          <div class="staff-bar-l">
+            <button class="sbtn red" onclick="openAddModal()">
+              <i class="fa-solid fa-user-plus"></i> 손님 추가
+            </button>
+            <button class="sbtn" onclick="openQrModal()">
+              <i class="fa-solid fa-qrcode"></i> QR 코드
+            </button>
+            <button class="sbtn" onclick="openSettingsModal()">
+              <i class="fa-solid fa-gear"></i> 설정
+            </button>
+          </div>
+          <button class="sbtn exit" onclick="exitStaff()">
+            <i class="fa-solid fa-door-open"></i> 손님 화면
           </button>
-          <div class="chk-result" id="chk-result"></div>
+        </div>
+        <div class="tbl-wrap">
+          <table id="staff-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>전화번호</th>
+                <th>인원</th>
+                <th>대기시간</th>
+                <th>상태</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody id="staff-tbody"></tbody>
+          </table>
+          <div class="empty" id="staff-empty" style="display:none;">
+            <i class="fa-solid fa-chair"></i>
+            <p>아직 대기 중인 손님이 없습니다.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- PIN MODAL -->
+    <div class="modal" id="pin-modal">
+      <div class="mcard">
+        <div class="mh"><i class="fa-solid fa-lock" style="color:var(--gold)"></i> 직원 인증</div>
+        <div class="pin-dots" id="pin-dots">
+          <div class="pin-dot" id="pd0"></div>
+          <div class="pin-dot" id="pd1"></div>
+          <div class="pin-dot" id="pd2"></div>
+          <div class="pin-dot" id="pd3"></div>
+        </div>
+        <div class="pin-numpad">
+          <button class="pkey" onclick="pinInput('1')">1</button>
+          <button class="pkey" onclick="pinInput('2')">2</button>
+          <button class="pkey" onclick="pinInput('3')">3</button>
+          <button class="pkey" onclick="pinInput('4')">4</button>
+          <button class="pkey" onclick="pinInput('5')">5</button>
+          <button class="pkey" onclick="pinInput('6')">6</button>
+          <button class="pkey" onclick="pinInput('7')">7</button>
+          <button class="pkey" onclick="pinInput('8')">8</button>
+          <button class="pkey" onclick="pinInput('9')">9</button>
+          <button class="pkey pdel" onclick="pinInput('del')"><i class="fa-solid fa-delete-left"></i></button>
+          <button class="pkey" onclick="pinInput('0')">0</button>
+          <button class="pkey" onclick="closeModal('pin-modal')" style="color:var(--muted);font-size:14px;">취소</button>
+        </div>
+        <div class="pin-err" id="pin-err"></div>
+      </div>
+    </div>
+
+    <!-- ADD CUSTOMER MODAL (staff) -->
+    <div class="modal" id="add-modal">
+      <div class="mcard">
+        <div class="mh"><i class="fa-solid fa-user-plus" style="color:var(--teal)"></i> 손님 추가</div>
+        <input class="add-fi" type="tel" id="add-phone" placeholder="전화번호 (예: 01012345678)" maxlength="11">
+        <label class="fl">인원</label>
+        <div class="party-grid" style="margin-top:8px;margin-bottom:4px;" id="add-party-grid">
+          <button class="pbtn on" data-n="1" onclick="selectAddParty(1)">1명</button>
+          <button class="pbtn" data-n="2" onclick="selectAddParty(2)">2명</button>
+          <button class="pbtn" data-n="3" onclick="selectAddParty(3)">3명</button>
+          <button class="pbtn" data-n="4" onclick="selectAddParty(4)">4명</button>
+          <button class="pbtn" data-n="5" onclick="selectAddParty(5)">5명</button>
+          <button class="pbtn" data-n="6" onclick="selectAddParty(6)">6+</button>
+        </div>
+        <div class="mbtns">
+          <button class="mcan" onclick="closeModal('add-modal')">취소</button>
+          <button class="mok red" onclick="confirmAdd()"><i class="fa-solid fa-check"></i> 등록</button>
         </div>
       </div>
     </div>
 
-    <!-- STAFF VIEW -->
-    <div class="view" id="staff-view">
-      <div class="staff-bar">
-        <div class="staff-bar-l">
-          <button class="sbtn red" onclick="openAddModal()">
-            <i class="fa-solid fa-user-plus"></i> 손님 추가
-          </button>
-          <button class="sbtn" onclick="openQrModal()">
-            <i class="fa-solid fa-qrcode"></i> QR 코드
-          </button>
-          <button class="sbtn" onclick="openSettingsModal()">
-            <i class="fa-solid fa-gear"></i> 설정
-          </button>
-        </div>
-        <button class="sbtn exit" onclick="exitStaff()">
-          <i class="fa-solid fa-door-open"></i> 손님 화면
-        </button>
-      </div>
-      <div class="tbl-wrap">
-        <table id="staff-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>이름 / 전화번호</th>
-              <th>인원</th>
-              <th>대기시간</th>
-              <th>상태</th>
-              <th>관리</th>
-            </tr>
-          </thead>
-          <tbody id="staff-tbody"></tbody>
-        </table>
-        <div class="empty" id="staff-empty" style="display:none;">
-          <i class="fa-solid fa-chair"></i>
-          <p>아직 대기 중인 손님이 없습니다.</p>
+    <!-- CALL MODAL -->
+    <div class="modal" id="call-modal">
+      <div class="mcard">
+        <div class="mh"><i class="fa-solid fa-phone-volume" style="color:var(--gold)"></i> 손님 호출</div>
+        <div class="call-name" id="call-name-txt"></div>
+        <div class="call-phone" id="call-phone-txt"></div>
+        <div class="mbtns">
+          <button class="mcan" onclick="closeModal('call-modal')">닫기</button>
+          <button class="mok green" onclick="confirmSeat()"><i class="fa-solid fa-chair"></i> 착석 완료</button>
         </div>
       </div>
     </div>
 
-  </div>
-
-  <!-- MODALS -->
-
-  <!-- PIN MODAL -->
-  <div class="modal" id="pin-modal">
-    <div class="mcard">
-      <div class="mh"><i class="fa-solid fa-lock" style="color:var(--gold)"></i> 직원 인증</div>
-      <div class="pin-dots" id="pin-dots">
-        <div class="pin-dot" id="pd0"></div>
-        <div class="pin-dot" id="pd1"></div>
-        <div class="pin-dot" id="pd2"></div>
-        <div class="pin-dot" id="pd3"></div>
-      </div>
-      <div class="pin-numpad">
-        <button class="pkey" onclick="pinInput('1')">1</button>
-        <button class="pkey" onclick="pinInput('2')">2</button>
-        <button class="pkey" onclick="pinInput('3')">3</button>
-        <button class="pkey" onclick="pinInput('4')">4</button>
-        <button class="pkey" onclick="pinInput('5')">5</button>
-        <button class="pkey" onclick="pinInput('6')">6</button>
-        <button class="pkey" onclick="pinInput('7')">7</button>
-        <button class="pkey" onclick="pinInput('8')">8</button>
-        <button class="pkey" onclick="pinInput('9')">9</button>
-        <button class="pkey pdel" onclick="pinInput('del')"><i class="fa-solid fa-delete-left"></i></button>
-        <button class="pkey" onclick="pinInput('0')">0</button>
-        <button class="pkey" onclick="closeModal('pin-modal')" style="color:var(--muted);font-size:14px;">취소</button>
-      </div>
-      <div class="pin-err" id="pin-err"></div>
-    </div>
-  </div>
-
-  <!-- ADD CUSTOMER MODAL (staff) -->
-  <div class="modal" id="add-modal">
-    <div class="mcard">
-      <div class="mh"><i class="fa-solid fa-user-plus" style="color:var(--teal)"></i> 손님 추가</div>
-      <input class="add-fi" type="text" id="add-name" placeholder="이름 (선택)" maxlength="20">
-      <input class="add-fi" type="tel" id="add-phone" placeholder="전화번호 (예: 01012345678)" maxlength="11">
-      <label class="fl">인원</label>
-      <div class="party-grid" style="margin-top:8px;margin-bottom:4px;" id="add-party-grid">
-        <button class="pbtn on" data-n="1" onclick="selectAddParty(1)">1명</button>
-        <button class="pbtn" data-n="2" onclick="selectAddParty(2)">2명</button>
-        <button class="pbtn" data-n="3" onclick="selectAddParty(3)">3명</button>
-        <button class="pbtn" data-n="4" onclick="selectAddParty(4)">4명</button>
-        <button class="pbtn" data-n="5" onclick="selectAddParty(5)">5명</button>
-        <button class="pbtn" data-n="6" onclick="selectAddParty(6)">6+</button>
-      </div>
-      <div class="mbtns">
-        <button class="mcan" onclick="closeModal('add-modal')">취소</button>
-        <button class="mok red" onclick="confirmAdd()"><i class="fa-solid fa-check"></i> 등록</button>
+    <!-- QR MODAL -->
+    <div class="modal" id="qr-modal">
+      <div class="mcard">
+        <div class="mh"><i class="fa-solid fa-qrcode" style="color:var(--teal)"></i> 손님용 QR 코드</div>
+        <div class="qr-wrap" id="qr-wrap"></div>
+        <div class="mbtns">
+          <button class="mok teal" style="background:linear-gradient(135deg,var(--teal),#0077b6);color:#fff;flex:1;"
+            onclick="closeModal('qr-modal')">확인</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- CALL MODAL -->
-  <div class="modal" id="call-modal">
-    <div class="mcard">
-      <div class="mh"><i class="fa-solid fa-phone-volume" style="color:var(--gold)"></i> 손님 호출</div>
-      <div class="call-name" id="call-name-txt"></div>
-      <div class="call-phone" id="call-phone-txt"></div>
-      <div class="mbtns">
-        <button class="mcan" onclick="closeModal('call-modal')">닫기</button>
-        <button class="mok green" onclick="confirmSeat()"><i class="fa-solid fa-chair"></i> 착석 완료</button>
+    <!-- SETTINGS MODAL -->
+    <div class="modal" id="settings-modal">
+      <div class="mcard">
+        <div class="mh"><i class="fa-solid fa-gear" style="color:var(--sub)"></i> 설정</div>
+        <div class="fg">
+          <label class="fl">레스토랑 이름</label>
+          <input class="add-fi" type="text" id="set-name" placeholder="레스토랑 이름">
+        </div>
+        <div class="fg">
+          <label class="fl">직원 PIN (4자리)</label>
+          <input class="add-fi" type="password" id="set-pin" placeholder="4자리 숫자" maxlength="4">
+        </div>
+        <div class="fg">
+          <label class="fl">팀당 평균 대기시간 (분)</label>
+          <input class="add-fi" type="number" id="set-avg" min="1" max="60" placeholder="5">
+        </div>
+        <div class="mbtns">
+          <button class="mcan" onclick="closeModal('settings-modal')">취소</button>
+          <button class="mok red" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> 저장</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- QR MODAL -->
-  <div class="modal" id="qr-modal">
-    <div class="mcard">
-      <div class="mh"><i class="fa-solid fa-qrcode" style="color:var(--teal)"></i> 손님용 QR 코드</div>
-      <div class="qr-wrap" id="qr-wrap"></div>
-      <div class="mbtns">
-        <button class="mok teal" style="background:linear-gradient(135deg,var(--teal),#0077b6);color:#fff;flex:1;"
-          onclick="closeModal('qr-modal')">확인</button>
+    <!-- DELETE CONFIRM -->
+    <div class="modal" id="del-modal">
+      <div class="mcard">
+        <div class="mh"><i class="fa-solid fa-trash" style="color:var(--red)"></i> 삭제 확인</div>
+        <p style="color:var(--sub);font-size:15px;" id="del-msg"></p>
+        <div class="mbtns">
+          <button class="mcan" onclick="closeModal('del-modal')">취소</button>
+          <button class="mok red" onclick="confirmDelete()">삭제</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- SETTINGS MODAL -->
-  <div class="modal" id="settings-modal">
-    <div class="mcard">
-      <div class="mh"><i class="fa-solid fa-gear" style="color:var(--sub)"></i> 설정</div>
-      <div class="fg">
-        <label class="fl">레스토랑 이름</label>
-        <input class="add-fi" type="text" id="set-name" placeholder="레스토랑 이름">
-      </div>
-      <div class="fg">
-        <label class="fl">직원 PIN (4자리)</label>
-        <input class="add-fi" type="password" id="set-pin" placeholder="4자리 숫자" maxlength="4">
-      </div>
-      <div class="fg">
-        <label class="fl">팀당 평균 대기시간 (분)</label>
-        <input class="add-fi" type="number" id="set-avg" min="1" max="60" placeholder="5">
-      </div>
-      <div class="mbtns">
-        <button class="mcan" onclick="closeModal('settings-modal')">취소</button>
-        <button class="mok red" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> 저장</button>
-      </div>
-    </div>
-  </div>
+    <!-- TOAST -->
+    <div id="toast"></div>
 
-  <!-- DELETE CONFIRM -->
-  <div class="modal" id="del-modal">
-    <div class="mcard">
-      <div class="mh"><i class="fa-solid fa-trash" style="color:var(--red)"></i> 삭제 확인</div>
-      <p style="color:var(--sub);font-size:15px;" id="del-msg"></p>
-      <div class="mbtns">
-        <button class="mcan" onclick="closeModal('del-modal')">취소</button>
-        <button class="mok red" onclick="confirmDelete()">삭제</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- TOAST -->
-  <div id="toast"></div>
-
-  <script>
-    // ─────────────────────────────────────────────
-    // ⚙️  FIREBASE 설정 (본인 프로젝트 값으로 교체)
-    // README.md 파일을 참고하여 설정해 주세요.
-    // ─────────────────────────────────────────────
-    const FIREBASE_CONFIG = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-
-    // ─────────────────────────────────────────────
-    // 앱 설정 (localStorage에서 로드)
-    // ─────────────────────────────────────────────
-    let CFG = {
-      restaurantName: '레스토랑',
-      staffPin: '1234',
-      avgMin: 5
-    };
-
-    function loadCfg() {
-      const s = localStorage.getItem('wl_cfg');
-      if (s) try { CFG = { ...CFG, ...JSON.parse(s) }; } catch (e) { }
-      document.getElementById('rest-name').textContent = CFG.restaurantName;
-    }
-    function saveCfg() {
-      localStorage.setItem('wl_cfg', JSON.stringify(CFG));
-      document.getElementById('rest-name').textContent = CFG.restaurantName;
-    }
-
-    // ─────────────────────────────────────────────
-    // FIREBASE / LOCAL 모드
-    // ─────────────────────────────────────────────
-    let db = null;
-    let useFirebase = false;
-    let waitlist = []; // [{id, name, phone, partySize, addedAt, status}]
-
-    function initFirebase() {
-      if (FIREBASE_CONFIG.apiKey === 'YOUR_API_KEY') {
-        useFirebase = false;
-        loadLocalData();
-        return;
-      }
-      try {
-        firebase.initializeApp(FIREBASE_CONFIG);
-        db = firebase.firestore();
-        useFirebase = true;
-        db.collection('waitlist')
-          .orderBy('addedAt', 'asc')
-          .onSnapshot(snap => {
-            waitlist = snap.docs.map((doc, i) => ({
-              id: doc.id,
-              position: i + 1,
-              ...doc.data(),
-              addedAt: doc.data().addedAt ? doc.data().addedAt.toDate() : new Date()
-            }));
-            render();
-          }, err => {
-            console.error(err);
-            useFirebase = false;
-            loadLocalData();
-          });
-      } catch (e) {
-        useFirebase = false;
-        loadLocalData();
-      }
-    }
-
-    function loadLocalData() {
-      const s = localStorage.getItem('wl_data');
-      if (s) try {
-        waitlist = JSON.parse(s).map((w, i) => ({ ...w, position: i + 1, addedAt: new Date(w.addedAt) }));
-      } catch (e) { waitlist = []; }
-      render();
-    }
-    function saveLocal() {
-      if (!useFirebase) {
-        localStorage.setItem('wl_data', JSON.stringify(waitlist));
-      }
-    }
-
-    // ─────────────────────────────────────────────
-    // CRUD
-    // ─────────────────────────────────────────────
-    async function addCustomer(name, phone, partySize) {
-      const norm = phone.replace(/\D/g, '');
-      const dup = waitlist.find(w => w.phone.replace(/\D/g, '') === norm);
-      if (dup) { toast(`이미 ${dup.position}번째로 대기 중입니다.`, 'err'); return false; }
-      const data = {
-        name: name || '손님',
-        phone: norm,
-        partySize: partySize,
-        addedAt: useFirebase ? firebase.firestore.FieldValue.serverTimestamp() : new Date().toISOString(),
-        status: 'waiting'
+    <script>
+      // ─────────────────────────────────────────────
+      // ⚙️  FIREBASE 설정 (본인 프로젝트 값으로 교체)
+      // README.md 파일을 참고하여 설정해 주세요.
+      // ─────────────────────────────────────────────
+      const FIREBASE_CONFIG = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
       };
-      if (useFirebase) {
-        await db.collection('waitlist').add(data);
-      } else {
-        waitlist.push({ ...data, id: Date.now().toString(), position: waitlist.length + 1, addedAt: new Date(data.addedAt) });
-        saveLocal(); render();
+
+      // ─────────────────────────────────────────────
+      // 앱 설정 (localStorage에서 로드)
+      // ─────────────────────────────────────────────
+      let CFG = {
+        restaurantName: '레스토랑',
+        staffPin: '1234',
+        avgMin: 5
+      };
+
+      function loadCfg() {
+        const s = localStorage.getItem('wl_cfg');
+        if (s) try { CFG = { ...CFG, ...JSON.parse(s) }; } catch (e) { }
+        document.getElementById('rest-name').textContent = CFG.restaurantName;
       }
-      return true;
-    }
-
-    async function removeCustomer(id) {
-      if (useFirebase) {
-        await db.collection('waitlist').doc(id).delete();
-      } else {
-        waitlist = waitlist.filter(w => w.id !== id).map((w, i) => ({ ...w, position: i + 1 }));
-        saveLocal(); render();
+      function saveCfg() {
+        localStorage.setItem('wl_cfg', JSON.stringify(CFG));
+        document.getElementById('rest-name').textContent = CFG.restaurantName;
       }
-    }
 
-    async function callCustomer(id) {
-      const w = waitlist.find(x => x.id === id);
-      const s = w?.status;
-      const newStatus = s === 'called' ? 'waiting' : 'called';
+      // ─────────────────────────────────────────────
+      // FIREBASE / LOCAL 모드
+      // ─────────────────────────────────────────────
+      let db = null;
+      let useFirebase = false;
+      let waitlist = []; // [{id, name, phone, partySize, addedAt, status}]
 
-      if (newStatus === 'called' && w) {
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-          const u = new SpeechSynthesisUtterance(`${w.position}번 ${w.name || '손님'}, 입장해 주세요.`);
-          u.lang = 'ko-KR';
-          u.rate = 0.85;
-          window.speechSynthesis.speak(u);
+      function initFirebase() {
+        if (FIREBASE_CONFIG.apiKey === 'YOUR_API_KEY') {
+          useFirebase = false;
+          loadLocalData();
+          return;
+        }
+        try {
+          firebase.initializeApp(FIREBASE_CONFIG);
+          db = firebase.firestore();
+          useFirebase = true;
+          db.collection('waitlist')
+            .orderBy('addedAt', 'asc')
+            .onSnapshot(snap => {
+              waitlist = snap.docs.map((doc, i) => ({
+                id: doc.id,
+                position: i + 1,
+                ...doc.data(),
+                addedAt: doc.data().addedAt ? doc.data().addedAt.toDate() : new Date()
+              }));
+              render();
+            }, err => {
+              console.error(err);
+              useFirebase = false;
+              loadLocalData();
+            });
+        } catch (e) {
+          useFirebase = false;
+          loadLocalData();
         }
       }
 
-      if (useFirebase) {
-        await db.collection('waitlist').doc(id).update({ status: newStatus });
-      } else {
-        waitlist = waitlist.map(w => w.id === id ? { ...w, status: newStatus } : w);
-        saveLocal(); render();
+      function loadLocalData() {
+        const s = localStorage.getItem('wl_data');
+        if (s) try {
+          waitlist = JSON.parse(s).map((w, i) => ({ ...w, position: i + 1, addedAt: new Date(w.addedAt) }));
+        } catch (e) { waitlist = []; }
+        render();
       }
-    }
-
-    // ─────────────────────────────────────────────
-    // PHONE INPUT STATE
-    // ─────────────────────────────────────────────
-    let regPhone = '';
-    let chkPhone = '';
-    let regParty = 1;
-    let addParty = 1;
-
-    function numpadInput(k, mode) {
-      if (mode === 'reg') {
-        if (k === 'del') regPhone = regPhone.slice(0, -1);
-        else if (k === 'clear') regPhone = '';
-        else if (regPhone.length < 11) regPhone += k;
-        updatePhoneDisp('reg-phone-disp', regPhone);
-      } else {
-        if (k === 'del') chkPhone = chkPhone.slice(0, -1);
-        else if (k === 'clear') chkPhone = '';
-        else if (chkPhone.length < 11) chkPhone += k;
-        updatePhoneDisp('chk-phone-disp', chkPhone);
+      function saveLocal() {
+        if (!useFirebase) {
+          localStorage.setItem('wl_data', JSON.stringify(waitlist));
+        }
       }
-    }
-    function updatePhoneDisp(id, val) {
-      const el = document.getElementById(id);
-      if (!val) { el.textContent = '번호를 입력해 주세요'; el.classList.add('empty'); return; }
-      el.classList.remove('empty');
-      // 010-xxxx-xxxx 형식
-      let d = val;
-      if (d.length > 3 && d.length <= 7) d = d.slice(0, 3) + '-' + d.slice(3);
-      else if (d.length > 7) d = d.slice(0, 3) + '-' + d.slice(3, 7) + '-' + d.slice(7);
-      el.textContent = d;
-    }
-    function selectParty(n) {
-      regParty = n;
-      document.querySelectorAll('#party-grid .pbtn').forEach(b => b.classList.toggle('on', parseInt(b.dataset.n) === n));
-    }
-    function selectAddParty(n) {
-      addParty = n;
-      document.querySelectorAll('#add-party-grid .pbtn').forEach(b => b.classList.toggle('on', parseInt(b.dataset.n) === n));
-    }
 
-    async function doRegister() {
-      const name = document.getElementById('reg-name').value.trim();
-      if (regPhone.length < 10) { toast('전화번호를 올바르게 입력해 주세요.', 'err'); return; }
-      const ok = await addCustomer(name, regPhone, regParty);
-      if (ok) {
-        toast('대기 등록이 완료되었습니다! 🎉', 'ok');
-        regPhone = ''; updatePhoneDisp('reg-phone-disp', '');
-        document.getElementById('reg-name').value = '';
-        regParty = 1; selectParty(1);
+      // ─────────────────────────────────────────────
+      // CRUD
+      // ─────────────────────────────────────────────
+      async function addCustomer(name, phone, partySize) {
+        const norm = phone.replace(/\D/g, '');
+        const dup = waitlist.find(w => w.phone.replace(/\D/g, '') === norm);
+        if (dup) { toast(`이미 ${dup.position}번째로 대기 중입니다.`, 'err'); return false; }
+        const data = {
+          name: name || '손님',
+          phone: norm,
+          partySize: partySize,
+          addedAt: useFirebase ? firebase.firestore.FieldValue.serverTimestamp() : new Date().toISOString(),
+          status: 'waiting'
+        };
+        if (useFirebase) {
+          await db.collection('waitlist').add(data);
+        } else {
+          waitlist.push({ ...data, id: Date.now().toString(), position: waitlist.length + 1, addedAt: new Date(data.addedAt) });
+          saveLocal(); render();
+        }
+        return true;
       }
-    }
 
-    function doCheck() {
-      const norm = chkPhone.replace(/\D/g, '');
-      if (norm.length < 10) { toast('전화번호를 입력해 주세요.', 'err'); return; }
-      const found = waitlist.find(w => w.phone.replace(/\D/g, '') === norm);
-      const res = document.getElementById('chk-result');
-      res.classList.add('on');
-      if (!found) {
-        res.innerHTML = `<p class="not-found"><i class="fa-solid fa-circle-xmark" style="font-size:40px;display:block;margin-bottom:10px;"></i>등록된 번호를 찾을 수 없습니다.</p>`;
-        return;
+      async function removeCustomer(id) {
+        if (useFirebase) {
+          await db.collection('waitlist').doc(id).delete();
+        } else {
+          waitlist = waitlist.filter(w => w.id !== id).map((w, i) => ({ ...w, position: i + 1 }));
+          saveLocal(); render();
+        }
       }
-      const waitMins = (found.position - 1) * CFG.avgMin;
-      const statusHtml = found.status === 'called'
-        ? `<span class="pos-status called"><i class="fa-solid fa-bell"></i> 지금 바로 입장 가능합니다!</span>`
-        : `<span class="pos-status waiting"><i class="fa-solid fa-hourglass-half"></i> 대기 중</span>`;
-      res.innerHTML = `
-    <div class="pos-num">${found.position}</div>
-    <div class="pos-lbl">현재 대기 순서 (전체 ${waitlist.length}팀)</div>
-    <div class="pos-wait">예상 대기시간: 약 ${waitMins}분</div>
-    ${statusHtml}
-    <div style="margin-top:24px;border-top:1px solid var(--border2);padding-top:20px;">
-      <button class="btn-p" style="background:transparent;border:1.5px solid var(--red);color:var(--red);padding:12px;font-size:14px;" onclick="cancelMyWait('${found.id}')">
-        <i class="fa-solid fa-xmark"></i> 내 대기 취소하기
-      </button>
-    </div>
-  `;
-    }
 
-    function cancelMyWait(id) {
-      if (confirm("정말로 대기를 취소하시겠습니까?")) {
-        removeCustomer(id);
-        document.getElementById('chk-result').classList.remove('on');
-        chkPhone = ''; updatePhoneDisp('chk-phone-disp', '');
-        toast('대기가 취소되었습니다.', 'info');
+      async function callCustomer(id) {
+        const w = waitlist.find(x => x.id === id);
+        const s = w?.status;
+        const newStatus = s === 'called' ? 'waiting' : 'called';
+
+        if (newStatus === 'called' && w) {
+          if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(`${w.position}번 ${w.name || '손님'}, 입장해 주세요.`);
+            u.lang = 'ko-KR';
+            u.rate = 0.85;
+            window.speechSynthesis.speak(u);
+          }
+        }
+
+        if (useFirebase) {
+          await db.collection('waitlist').doc(id).update({ status: newStatus });
+        } else {
+          waitlist = waitlist.map(w => w.id === id ? { ...w, status: newStatus } : w);
+          saveLocal(); render();
+        }
       }
-    }
 
-    // ─────────────────────────────────────────────
-    // TABS / VIEWS
-    // ─────────────────────────────────────────────
-    function switchTab(t) {
-      ['reg', 'chk'].forEach(x => {
-        document.getElementById('tab-' + x).classList.toggle('on', x === t);
-        document.getElementById('panel-' + x).classList.toggle('on', x === t);
+      // ─────────────────────────────────────────────
+      // PHONE INPUT STATE
+      // ─────────────────────────────────────────────
+      let regPhone = '';
+      let chkPhone = '';
+      let regParty = 1;
+      let addParty = 1;
+
+      function numpadInput(k, mode) {
+        if (mode === 'reg') {
+          if (k === 'del') regPhone = regPhone.slice(0, -1);
+          else if (k === 'clear') regPhone = '';
+          else if (regPhone.length < 11) regPhone += k;
+          updatePhoneDisp('reg-phone-disp', regPhone);
+        } else {
+          if (k === 'del') chkPhone = chkPhone.slice(0, -1);
+          else if (k === 'clear') chkPhone = '';
+          else if (chkPhone.length < 11) chkPhone += k;
+          updatePhoneDisp('chk-phone-disp', chkPhone);
+        }
+      }
+      function updatePhoneDisp(id, val) {
+        const el = document.getElementById(id);
+        if (!val) { el.textContent = '번호를 입력해 주세요'; el.classList.add('empty'); return; }
+        el.classList.remove('empty');
+        // 010-xxxx-xxxx 형식
+        let d = val;
+        if (d.length > 3 && d.length <= 7) d = d.slice(0, 3) + '-' + d.slice(3);
+        else if (d.length > 7) d = d.slice(0, 3) + '-' + d.slice(3, 7) + '-' + d.slice(7);
+        el.textContent = d;
+      }
+      function selectParty(n) {
+        regParty = n;
+        document.querySelectorAll('#party-grid .pbtn').forEach(b => b.classList.toggle('on', parseInt(b.dataset.n) === n));
+      }
+      function selectAddParty(n) {
+        addParty = n;
+        document.querySelectorAll('#add-party-grid .pbtn').forEach(b => b.classList.toggle('on', parseInt(b.dataset.n) === n));
+      }
+
+      async function doRegister() {
+        if (regPhone.length < 10) { toast('전화번호를 올바르게 입력해 주세요.', 'err'); return; }
+        const ok = await addCustomer('', regPhone, regParty);
+        if (ok) {
+          toast('대기 등록이 완료되었습니다! 🎉', 'ok');
+          regPhone = ''; updatePhoneDisp('reg-phone-disp', '');
+          regParty = 1; selectParty(1);
+        }
+      }
+
+      // ─────────────────────────────────────────────
+      // STAFF VIEW
+      // ─────────────────────────────────────────────
+      let pressTimer = null;
+      const hdLeft = document.querySelector('.hd-left');
+
+      function startPress() {
+        pressTimer = setTimeout(() => {
+          openPinModal();
+        }, 1200);
+      }
+      function cancelPress() {
+        clearTimeout(pressTimer);
+      }
+
+      hdLeft.addEventListener('touchstart', startPress, { passive: true });
+      hdLeft.addEventListener('mousedown', startPress);
+      hdLeft.addEventListener('touchend', cancelPress);
+      hdLeft.addEventListener('mouseup', cancelPress);
+      hdLeft.addEventListener('mouseleave', cancelPress);
+
+      let tapCount = 0; let tapTimer = null;
+      document.getElementById('staff-tap').addEventListener('click', () => {
+        tapCount++;
+        if (tapTimer) clearTimeout(tapTimer);
+        if (tapCount >= 5) { tapCount = 0; openPinModal(); return; }
+        tapTimer = setTimeout(() => tapCount = 0, 1500);
       });
-      if (t === 'chk') { document.getElementById('chk-result').classList.remove('on'); }
-    }
 
-    // ─────────────────────────────────────────────
-    // STAFF VIEW
-    // ─────────────────────────────────────────────
-    let pressTimer = null;
-    const hdLeft = document.querySelector('.hd-left');
-
-    function startPress() {
-      pressTimer = setTimeout(() => {
-        openPinModal();
-      }, 1200);
-    }
-    function cancelPress() {
-      clearTimeout(pressTimer);
-    }
-
-    hdLeft.addEventListener('touchstart', startPress, { passive: true });
-    hdLeft.addEventListener('mousedown', startPress);
-    hdLeft.addEventListener('touchend', cancelPress);
-    hdLeft.addEventListener('mouseup', cancelPress);
-    hdLeft.addEventListener('mouseleave', cancelPress);
-
-    let tapCount = 0; let tapTimer = null;
-    document.getElementById('staff-tap').addEventListener('click', () => {
-      tapCount++;
-      if (tapTimer) clearTimeout(tapTimer);
-      if (tapCount >= 5) { tapCount = 0; openPinModal(); return; }
-      tapTimer = setTimeout(() => tapCount = 0, 1500);
-    });
-
-    function exitStaff() {
-      document.getElementById('staff-view').classList.remove('active');
-      document.getElementById('customer-view').classList.add('active');
-    }
-
-    // ─────────────────────────────────────────────
-    // RENDER
-    // ─────────────────────────────────────────────
-    function render() {
-      const tbody = document.getElementById('staff-tbody');
-      const empty = document.getElementById('staff-empty');
-      document.getElementById('stat-total').textContent = waitlist.length;
-      document.getElementById('stat-wait').textContent = waitlist.length > 0 ? (waitlist.length * CFG.avgMin) + '분' : '0분';
-      if (!waitlist.length) {
-        tbody.innerHTML = '';
-        empty.style.display = 'block';
-        return;
+      function exitStaff() {
+        document.getElementById('staff-view').classList.remove('active');
+        document.getElementById('customer-view').classList.add('active');
       }
-      empty.style.display = 'none';
-      const now = Date.now();
-      tbody.innerHTML = waitlist.map(w => {
-        const elapsed = Math.floor((now - (w.addedAt?.getTime?.() ?? now)) / 60000);
-        const phone = w.phone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
-        return `
+
+      // ─────────────────────────────────────────────
+      // RENDER
+      // ─────────────────────────────────────────────
+      function render() {
+        const tbody = document.getElementById('staff-tbody');
+        const empty = document.getElementById('staff-empty');
+        document.getElementById('stat-total').textContent = waitlist.length;
+        document.getElementById('stat-wait').textContent = waitlist.length > 0 ? (waitlist.length * CFG.avgMin) + '분' : '0분';
+        if (!waitlist.length) {
+          tbody.innerHTML = '';
+          empty.style.display = 'block';
+          renderBoardLive();
+          return;
+        }
+        empty.style.display = 'none';
+        const now = Date.now();
+        tbody.innerHTML = waitlist.map(w => {
+          const elapsed = Math.floor((now - (w.addedAt?.getTime?.() ?? now)) / 60000);
+          const phone = w.phone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
+          return `
     <tr class="${w.status === 'called' ? 'called-row' : ''}" id="row-${w.id}">
       <td><div class="qnum">${w.position}</div></td>
       <td>
-        <div class="c-name">${esc(w.name)}</div>
-        <div class="c-phone">${phone}</div>
+        <div class="c-phone" style="font-size:16px; font-weight:700; color:var(--text);">${phone}</div>
       </td>
       <td><span class="party-badge"><i class="fa-solid fa-person" style="font-size:12px;"></i>${w.partySize}명</span></td>
       <td><span class="wait-badge">${elapsed}분 전</span></td>
@@ -1553,177 +1569,221 @@
         </div>
       </td>
     </tr>`;
-      }).join('');
-    }
+        }).join('');
 
-    function esc(s) { return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
-
-    // ─────────────────────────────────────────────
-    // MODALS
-    // ─────────────────────────────────────────────
-    let pinVal = '';
-    function openPinModal() {
-      pinVal = '';
-      updatePinDots();
-      document.getElementById('pin-err').textContent = '';
-      document.getElementById('pin-modal').classList.add('on');
-    }
-    function pinInput(k) {
-      if (k === 'del') { pinVal = pinVal.slice(0, -1); }
-      else if (pinVal.length < 4) { pinVal += k; }
-      updatePinDots();
-      if (pinVal.length === 4) {
-        setTimeout(() => {
-          if (pinVal === CFG.staffPin) {
-            closeModal('pin-modal');
-            document.getElementById('customer-view').classList.remove('active');
-            document.getElementById('staff-view').classList.add('active');
-            render();
-          } else {
-            document.getElementById('pin-err').textContent = 'PIN이 올바르지 않습니다.';
-            pinVal = ''; updatePinDots();
-          }
-        }, 200);
+        renderBoardLive();
       }
-    }
-    function updatePinDots() {
-      for (let i = 0; i < 4; i++) document.getElementById('pd' + i).classList.toggle('filled', i < pinVal.length);
-    }
 
-    function openAddModal() {
-      addParty = 1;
-      document.getElementById('add-name').value = '';
-      document.getElementById('add-phone').value = '';
-      selectAddParty(1);
-      document.getElementById('add-modal').classList.add('on');
-    }
-    async function confirmAdd() {
-      const name = document.getElementById('add-name').value.trim();
-      const phone = document.getElementById('add-phone').value.trim();
-      if (phone.length < 10) { toast('전화번호를 올바르게 입력해 주세요.', 'err'); return; }
-      const ok = await addCustomer(name, phone, addParty);
-      if (ok) { closeModal('add-modal'); toast('등록되었습니다.', 'ok'); }
-    }
+      function renderBoardLive() {
+        const bList = document.getElementById('board-list-body');
+        const bEmpty = document.getElementById('board-empty');
 
-    let currentCallId = null;
-    function openCallModal(id) {
-      currentCallId = id;
-      const w = waitlist.find(x => x.id === id);
-      if (!w) return;
-      const phone = w.phone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
-      document.getElementById('call-name-txt').textContent = `${w.position}번 ${w.name} 손님 (${w.partySize}명)`;
-      document.getElementById('call-phone-txt').textContent = phone;
-      callCustomer(id);
-      document.getElementById('call-modal').classList.add('on');
-    }
-    async function confirmSeat() {
-      if (currentCallId) await removeCustomer(currentCallId);
-      closeModal('call-modal');
-      toast('착석 완료! 다음 손님 순서가 업데이트되었습니다.', 'ok');
-    }
+        if (!waitlist.length) {
+          bList.innerHTML = '';
+          bEmpty.style.display = 'block';
+          return;
+        }
 
-    async function doSeat(id, name) {
-      await removeCustomer(id);
-      toast(`${name} 손님 착석 완료.`, 'ok');
-    }
+        bEmpty.style.display = 'none';
 
-    let delTargetId = null;
-    function openDelModal(id, name) {
-      delTargetId = id;
-      document.getElementById('del-msg').textContent = `"${name}" 손님을 대기 목록에서 삭제하시겠습니까?`;
-      document.getElementById('del-modal').classList.add('on');
-    }
-    async function confirmDelete() {
-      if (delTargetId) { await removeCustomer(delTargetId); toast('삭제되었습니다.', 'info'); }
-      closeModal('del-modal');
-    }
+        bList.innerHTML = waitlist.map(w => {
+          // 전화번호 뒷자리 마스킹 처리 010-92*1-8**5
+          const raw = w.phone;
+          let masked = '';
+          if (raw.length === 11) {
+            masked = raw.slice(0, 3) + '-' + raw.slice(3, 5) + '*' + raw.slice(6, 7) + '-' + raw.slice(7, 8) + '**' + raw.slice(10, 11);
+          } else if (raw.length === 10) {
+            masked = raw.slice(0, 3) + '-' + raw.slice(3, 4) + '*' + raw.slice(5, 6) + '-' + raw.slice(6, 7) + '**' + raw.slice(9, 10);
+          } else {
+            masked = raw;
+          }
 
-    function openQrModal() {
-      const url = encodeURIComponent(location.href.split('?')[0]);
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${url}`;
-      document.getElementById('qr-wrap').innerHTML = `
+          const isCalled = w.status === 'called';
+          const stText = isCalled ? '호출됨' : '대기중';
+          const stClass = isCalled ? 'called' : 'waiting';
+
+          return `
+        <div class="board-item ${isCalled ? 'called' : ''}">
+          <div class="bi-num">${w.position}</div>
+          <div class="bi-info">
+            <div class="bi-phone">${masked}</div>
+            <div class="bi-sub">인원: ${w.partySize}명</div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+            <div class="bi-status ${stClass}">${stText}</div>
+            <button class="btn-seat-small" onclick="doSeat('${w.id}','${masked}')">입장완료</button>
+          </div>
+        </div>
+        `;
+        }).join('');
+      }
+
+      function esc(s) { return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+      // ─────────────────────────────────────────────
+      // MODALS
+      // ─────────────────────────────────────────────
+      let pinVal = '';
+      function openPinModal() {
+        pinVal = '';
+        updatePinDots();
+        document.getElementById('pin-err').textContent = '';
+        document.getElementById('pin-modal').classList.add('on');
+      }
+      function pinInput(k) {
+        if (k === 'del') { pinVal = pinVal.slice(0, -1); }
+        else if (pinVal.length < 4) { pinVal += k; }
+        updatePinDots();
+        if (pinVal.length === 4) {
+          setTimeout(() => {
+            if (pinVal === CFG.staffPin) {
+              closeModal('pin-modal');
+              document.getElementById('customer-view').classList.remove('active');
+              document.getElementById('staff-view').classList.add('active');
+              render();
+            } else {
+              document.getElementById('pin-err').textContent = 'PIN이 올바르지 않습니다.';
+              pinVal = ''; updatePinDots();
+            }
+          }, 200);
+        }
+      }
+      function updatePinDots() {
+        for (let i = 0; i < 4; i++) document.getElementById('pd' + i).classList.toggle('filled', i < pinVal.length);
+      }
+
+      function openAddModal() {
+        addParty = 1;
+        document.getElementById('add-phone').value = '';
+        selectAddParty(1);
+        document.getElementById('add-modal').classList.add('on');
+      }
+      async function confirmAdd() {
+        const phone = document.getElementById('add-phone').value.trim();
+        if (phone.length < 10) { toast('전화번호를 올바르게 입력해 주세요.', 'err'); return; }
+        const ok = await addCustomer('', phone, addParty);
+        if (ok) { closeModal('add-modal'); toast('등록되었습니다.', 'ok'); }
+      }
+
+      let currentCallId = null;
+      function openCallModal(id) {
+        currentCallId = id;
+        const w = waitlist.find(x => x.id === id);
+        if (!w) return;
+        const phone = w.phone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
+        document.getElementById('call-name-txt').textContent = `${w.position}번 ${w.name} 손님 (${w.partySize}명)`;
+        document.getElementById('call-phone-txt').textContent = phone;
+        callCustomer(id);
+        document.getElementById('call-modal').classList.add('on');
+      }
+      async function confirmSeat() {
+        if (currentCallId) await removeCustomer(currentCallId);
+        closeModal('call-modal');
+        toast('착석 완료! 다음 손님 순서가 업데이트되었습니다.', 'ok');
+      }
+
+      async function doSeat(id, name) {
+        await removeCustomer(id);
+        toast(`${name} 손님 착석 완료.`, 'ok');
+      }
+
+      let delTargetId = null;
+      function openDelModal(id, name) {
+        delTargetId = id;
+        document.getElementById('del-msg').textContent = `"${name}" 손님을 대기 목록에서 삭제하시겠습니까?`;
+        document.getElementById('del-modal').classList.add('on');
+      }
+      async function confirmDelete() {
+        if (delTargetId) { await removeCustomer(delTargetId); toast('삭제되었습니다.', 'info'); }
+        closeModal('del-modal');
+      }
+
+      function openQrModal() {
+        const url = encodeURIComponent(location.href.split('?')[0]);
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${url}`;
+        document.getElementById('qr-wrap').innerHTML = `
     <img src="${qrUrl}" alt="QR Code">
     <div class="qr-url">${decodeURIComponent(url)}</div>
     <p style="color:var(--muted);font-size:13px;margin-top:8px;">손님이 스마트폰으로 스캔하면 순서를 확인할 수 있습니다.</p>
   `;
-      document.getElementById('qr-modal').classList.add('on');
-    }
+        document.getElementById('qr-modal').classList.add('on');
+      }
 
-    function openSettingsModal() {
-      document.getElementById('set-name').value = CFG.restaurantName;
-      document.getElementById('set-pin').value = CFG.staffPin;
-      document.getElementById('set-avg').value = CFG.avgMin;
-      document.getElementById('settings-modal').classList.add('on');
-    }
-    function saveSettings() {
-      const name = document.getElementById('set-name').value.trim();
-      const pin = document.getElementById('set-pin').value.trim();
-      const avg = parseInt(document.getElementById('set-avg').value);
-      if (pin && !/^\d{4}$/.test(pin)) { toast('PIN은 4자리 숫자여야 합니다.', 'err'); return; }
-      if (name) CFG.restaurantName = name;
-      if (pin) CFG.staffPin = pin;
-      if (!isNaN(avg) && avg > 0) CFG.avgMin = avg;
-      saveCfg(); render();
-      closeModal('settings-modal');
-      toast('설정이 저장되었습니다.', 'ok');
-    }
+      function openSettingsModal() {
+        document.getElementById('set-name').value = CFG.restaurantName;
+        document.getElementById('set-pin').value = CFG.staffPin;
+        document.getElementById('set-avg').value = CFG.avgMin;
+        document.getElementById('settings-modal').classList.add('on');
+      }
+      function saveSettings() {
+        const name = document.getElementById('set-name').value.trim();
+        const pin = document.getElementById('set-pin').value.trim();
+        const avg = parseInt(document.getElementById('set-avg').value);
+        if (pin && !/^\d{4}$/.test(pin)) { toast('PIN은 4자리 숫자여야 합니다.', 'err'); return; }
+        if (name) CFG.restaurantName = name;
+        if (pin) CFG.staffPin = pin;
+        if (!isNaN(avg) && avg > 0) CFG.avgMin = avg;
+        saveCfg(); render();
+        closeModal('settings-modal');
+        toast('설정이 저장되었습니다.', 'ok');
+      }
 
-    function closeModal(id) {
-      document.getElementById(id).classList.remove('on');
-    }
+      function closeModal(id) {
+        document.getElementById(id).classList.remove('on');
+      }
 
-    // ─────────────────────────────────────────────
-    // TOAST
-    // ─────────────────────────────────────────────
-    let toastTimer;
-    function toast(msg, type = 'info') {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.className = `show ${type}`;
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => t.className = '', 3000);
-    }
+      // ─────────────────────────────────────────────
+      // TOAST
+      // ─────────────────────────────────────────────
+      let toastTimer;
+      function toast(msg, type = 'info') {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = `show ${type}`;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.className = '', 3000);
+      }
 
-    // ─────────────────────────────────────────────
-    // CLOCK
-    // ─────────────────────────────────────────────
-    function updateClock() {
-      const now = new Date();
-      const hh = String(now.getHours()).padStart(2, '0');
-      const mm = String(now.getMinutes()).padStart(2, '0');
-      document.getElementById('clock').textContent = `${hh}:${mm}`;
-      const days = ['일', '월', '화', '수', '목', '금', '토'];
-      document.getElementById('ddate').textContent =
-        `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일 (${days[now.getDay()]})`;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-    // 대기시간 갱신 (1분마다)
-    setInterval(() => { if (waitlist.length) render(); }, 60000);
+      // ─────────────────────────────────────────────
+      // CLOCK
+      // ─────────────────────────────────────────────
+      function updateClock() {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        document.getElementById('clock').textContent = `${hh}:${mm}`;
+        const days = ['일', '월', '화', '수', '목', '금', '토'];
+        document.getElementById('ddate').textContent =
+          `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일 (${days[now.getDay()]})`;
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
+      // 대기시간 갱신 (1분마다)
+      setInterval(() => { if (waitlist.length) render(); }, 60000);
 
-    // ─────────────────────────────────────────────
-    // INIT
-    // ─────────────────────────────────────────────
-    loadCfg();
-    initFirebase();
+      // ─────────────────────────────────────────────
+      // INIT
+      // ─────────────────────────────────────────────
+      loadCfg();
+      initFirebase();
 
-    // URL ?staff 파라미터로 직원 화면 바로 접근 가능
-    if (location.search.includes('staff')) openPinModal();
+      // URL ?staff 파라미터로 직원 화면 바로 접근 가능
+      if (location.search.includes('staff')) openPinModal();
 
-    // 화면 꺼짐 방지 (Wake Lock)
-    let wakeLock = null;
-    async function requestWakeLock() {
-      try {
-        if ('wakeLock' in navigator) {
-          wakeLock = await navigator.wakeLock.request('screen');
-        }
-      } catch (err) { }
-    }
-    document.addEventListener('visibilitychange', async () => {
-      if (wakeLock !== null && document.visibilityState === 'visible') requestWakeLock();
-    });
-    requestWakeLock();
-  </script>
+      // 화면 꺼짐 방지 (Wake Lock)
+      let wakeLock = null;
+      async function requestWakeLock() {
+        try {
+          if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+          }
+        } catch (err) { }
+      }
+      document.addEventListener('visibilitychange', async () => {
+        if (wakeLock !== null && document.visibilityState === 'visible') requestWakeLock();
+      });
+      requestWakeLock();
+    </script>
 </body>
 
 </html>
