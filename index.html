@@ -1458,6 +1458,15 @@
             u.rate = 0.85;
             window.speechSynthesis.speak(u);
           }
+
+          // [추가된 기능] URI scheme으로 SMS / iMessage 자동 완성 띄우기
+          const msg = `[${CFG.restaurantName}] 많이 기다리셨습니다. 테이블이 준비되었습니다. 매장으로 입장해 주세요!`;
+          const phoneNum = w.phone.replace(/-/g, ''); // 숫자만 남기기
+          // 사용자 기기가 아이폰(iOS)일 경우 sms:번호&body= 방식, 안드로이드는 sms:번호?body= 방식 사용
+          const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+          const sep = isIOS ? '&' : '?';
+
+          window.location.href = `sms:${phoneNum}${sep}body=${encodeURIComponent(msg)}`;
         }
 
         if (useFirebase) {
