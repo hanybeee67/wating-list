@@ -181,9 +181,9 @@
     /* PANELS (Split Screen Use) */
     .panel {
       flex: 1;
-      overflow-y: hidden;
-      /* 전체 페이지 스크롤 삭제 */
-      padding: 16px;
+      /* 전체 페이지 스크롤 복구 (모바일 등 작은 화면에서 짤림 방지) */
+      overflow-y: auto;
+      padding: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -226,13 +226,13 @@
 
     .fi {
       width: 100%;
-      padding: 12px 14px;
+      padding: 10px 12px;
       background: var(--card);
       border: 1.5px solid var(--border2);
       border-radius: var(--r);
       color: var(--text);
       font-family: inherit;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 500;
       outline: none;
       transition: var(--tr);
@@ -251,7 +251,7 @@
     .party-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      gap: 8px;
+      gap: 6px;
     }
 
     .pbtn {
@@ -261,7 +261,7 @@
       border-radius: var(--r);
       color: var(--text);
       font-family: inherit;
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       transition: var(--tr);
@@ -279,12 +279,12 @@
       background: var(--card);
       border: 1.5px solid var(--border2);
       border-radius: var(--r);
-      padding: 10px 14px;
-      font-size: 22px;
+      padding: 8px 12px;
+      font-size: 20px;
       font-weight: 700;
       letter-spacing: 2px;
       color: var(--text);
-      min-height: 52px;
+      min-height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -299,18 +299,18 @@
     .numpad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-top: 8px;
+      gap: 4px;
+      margin-top: 6px;
     }
 
     .nkey {
-      padding: 12px;
+      padding: 10px;
       background: var(--card);
       border: 1.5px solid var(--border);
       border-radius: var(--r);
       color: var(--text);
       font-family: inherit;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
       transition: var(--tr);
@@ -347,8 +347,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin-top: auto;
-      /* 하단으로 밀착 */
+      margin-top: 10px;
     }
 
     .btn-p.red {
