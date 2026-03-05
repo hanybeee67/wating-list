@@ -107,26 +107,29 @@ const FIREBASE_CONFIG = {
 
 ---
 
-## 🌐 무료 호스팅 (손님이 스마트폰으로 접속하려면)
+## 🌐 무료 호스팅 (인터넷을 통해 스마트폰 등에서 접속하려면)
 
-### 방법 A: Firebase Hosting (추천)
+작업한 코드를 웹 서버에 올려 진짜 웹 주소를 만드는 과정입니다. GitHub 저장소와 연동하여 사용하는 **Render(렌더)** 무료 호스팅을 강력히 추천합니다.
 
-```bash
-npm install -g firebase-tools
-firebase login
-firebase init hosting
-# 폴더: 현재 폴더 (./)
-firebase deploy
-```
-→ `https://프로젝트ID.web.app` 주소 생성
+### 🚀 Render 무료 배포 방법 (가장 추천)
 
-### 방법 B: Netlify Drop (가장 쉬움)
+1. **[Render 홈페이지](https://render.com/)** 에 접속 후 우측 상단의 **[GET STARTED]** 를 눌러 회원가입합니다. (GitHub 계정으로 로그인 `Continue with GitHub` 추천)
+2. 로그인 후 나오는 대시보드 화면 우측 상단의 **[New +]** 버튼을 누르고 **[Static Site]** 를 선택합니다.
+3. 깃허브 계정 연동 창이 뜨면 **[Connect GitHub]** 를 누르고 본인의 계정을 연결합니다.
+4. 목록에 `wating-list` 저장소가 나타나면 옆에 있는 **[Connect]** 버튼을 클릭합니다.
+5. 설정 화면이 나타나면 Name에 원하는 고유 이름(예: `hany-waiting`)을 적습니다. (다른 내용은 모두 그대로 둡니다.)
+6. 화면 맨 아래의 파란색 **[Create Static Site]** 버튼을 누릅니다.
+7. 잠시 후 배포가 완료되면, 화면 상단에 초록색 글씨로 웹 주소(예: `https://hany-waiting.onrender.com`)가 나타납니다.
 
-1. [app.netlify.com/drop](https://app.netlify.com/drop) 접속
-2. `WATING LIST` 폴더를 드래그 앤 드롭
-3. 자동으로 URL 생성됨
+이 주소가 배포된 최종 웹사이트 주소입니다. 이제 이 주소를 태블릿이나 스마트폰 인터넷 창에 입력하면 어디서든 접속할 수 있습니다!
 
 ---
+
+### 방법 B: Netlify Drop (GitHub 없이 파일만 올릴 때)
+
+1. [app.netlify.com/drop](https://app.netlify.com/drop) 접속
+2. `WATING LIST` 폴더를 화면에 드래그 앤 드롭
+3. 자동으로 랜덤 URL 주소가 생성됨
 
 ## 📱 사용 방법
 
