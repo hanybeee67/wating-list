@@ -1174,47 +1174,45 @@
           </div>
         </div>
       </div>
+    </div>
 
-
-      <!-- STAFF VIEW -->
-      <div class="view" id="staff-view">
-        <div class="staff-bar">
-          <div class="staff-bar-l">
-            <button class="sbtn red" onclick="openAddModal()">
-              <i class="fa-solid fa-user-plus"></i> 손님 추가
-            </button>
-            <button class="sbtn" onclick="openQrModal()">
-              <i class="fa-solid fa-qrcode"></i> QR 코드
-            </button>
-            <button class="sbtn" onclick="openSettingsModal()">
-              <i class="fa-solid fa-gear"></i> 설정
-            </button>
-          </div>
-          <button class="sbtn exit" onclick="exitStaff()">
-            <i class="fa-solid fa-door-open"></i> 손님 화면
+    <!-- STAFF VIEW -->
+    <div class="view" id="staff-view">
+      <div class="staff-bar">
+        <div class="staff-bar-l">
+          <button class="sbtn red" onclick="openAddModal()">
+            <i class="fa-solid fa-user-plus"></i> 손님 추가
+          </button>
+          <button class="sbtn" onclick="openQrModal()">
+            <i class="fa-solid fa-qrcode"></i> QR 코드
+          </button>
+          <button class="sbtn" onclick="openSettingsModal()">
+            <i class="fa-solid fa-gear"></i> 설정
           </button>
         </div>
-        <div class="tbl-wrap">
-          <table id="staff-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>전화번호</th>
-                <th>인원</th>
-                <th>대기시간</th>
-                <th>상태</th>
-                <th>관리</th>
-              </tr>
-            </thead>
-            <tbody id="staff-tbody"></tbody>
-          </table>
-          <div class="empty" id="staff-empty" style="display:none;">
-            <i class="fa-solid fa-chair"></i>
-            <p>아직 대기 중인 손님이 없습니다.</p>
-          </div>
+        <button class="sbtn exit" onclick="exitStaff()">
+          <i class="fa-solid fa-door-open"></i> 손님 화면
+        </button>
+      </div>
+      <div class="tbl-wrap">
+        <table id="staff-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>전화번호</th>
+              <th>인원</th>
+              <th>대기시간</th>
+              <th>상태</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody id="staff-tbody"></tbody>
+        </table>
+        <div class="empty" id="staff-empty" style="display:none;">
+          <i class="fa-solid fa-chair"></i>
+          <p>아직 대기 중인 손님이 없습니다.</p>
         </div>
       </div>
-
     </div>
 
     <!-- MODALS -->
