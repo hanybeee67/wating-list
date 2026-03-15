@@ -1095,16 +1095,7 @@
           <div class="hd-sub">웨이팅 리스트</div>
         </div>
       </div>
-      <div class="hd-stats">
-        <div class="stat">
-          <div class="stat-v" id="stat-total">0</div>
-          <div class="stat-l">대기팀</div>
-        </div>
-        <div class="stat">
-          <div class="stat-v" id="stat-wait">0분</div>
-          <div class="stat-l">예상 대기</div>
-        </div>
-      </div>
+      <div id="waiting-msg" style="font-size:15px; font-weight:700; color:var(--teal);">현재 0팀이 대기중입니다.</div>
       <div class="hd-right">
         <div class="hd-time" id="clock">--:--</div>
         <div class="hd-date" id="ddate">--</div>
@@ -1580,8 +1571,7 @@
       function render() {
         const tbody = document.getElementById('staff-tbody');
         const empty = document.getElementById('staff-empty');
-        document.getElementById('stat-total').textContent = waitlist.length;
-        document.getElementById('stat-wait').textContent = waitlist.length > 0 ? (waitlist.length * CFG.avgMin) + '분' : '0분';
+        document.getElementById('waiting-msg').textContent = `현재 ${waitlist.length}팀이 대기중입니다.`;
         if (!waitlist.length) {
           tbody.innerHTML = '';
           empty.style.display = 'block';
