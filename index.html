@@ -1123,20 +1123,21 @@
             <div class="form-hint">전화번호를 입력하고 대기 등록을 눌러주세요.</div>
             <div class="fg">
               <label class="fl">전화번호</label>
-              <div class="phone-disp empty" id="reg-phone-disp">번호를 입력해 주세요</div>
+              <div class="phone-disp" id="reg-phone-disp">010</div>
+              <div id="reg-phone-hint" style="text-align:center; font-size:12px; color:var(--teal); margin-top:6px; min-height:18px;">010 다음 번호를 입력하세요</div>
               <div class="numpad" id="reg-numpad">
-                <button class="nkey" onclick="numpadInput('1','reg')">1</button>
-                <button class="nkey" onclick="numpadInput('2','reg')">2</button>
-                <button class="nkey" onclick="numpadInput('3','reg')">3</button>
-                <button class="nkey" onclick="numpadInput('4','reg')">4</button>
-                <button class="nkey" onclick="numpadInput('5','reg')">5</button>
-                <button class="nkey" onclick="numpadInput('6','reg')">6</button>
-                <button class="nkey" onclick="numpadInput('7','reg')">7</button>
-                <button class="nkey" onclick="numpadInput('8','reg')">8</button>
-                <button class="nkey" onclick="numpadInput('9','reg')">9</button>
-                <button class="nkey clr" onclick="numpadInput('clear','reg')">전체삭제</button>
-                <button class="nkey" onclick="numpadInput('0','reg')">0</button>
-                <button class="nkey del" onclick="numpadInput('del','reg')"><i
+                <button class="nkey" tabindex="-1" onclick="numpadInput('1','reg')">1</button>
+                <button class="nkey" tabindex="-1" onclick="numpadInput('2','reg')">2</button>
+                <button class="nkey" tabindex="-1" onclick="numpadInput('3','reg')">3</button>
+                <button class="nkey" tabindex="-1" onclick="numpadInput('4','reg')">4</button>
+                <button class="nkey" tabindex="-1" onclick="numpadInput('5','reg')">5</button>
+                <button class="nkey" tabindex="-1" onclick="numpadInput('6','reg')">6</button>
+                <button class="nkey" tabindex="-1" onclick="numpadInput('7','reg')">7</button>
+                <button class="nkey" tabindex="-1" onclick="numpadInput('8','reg')">8</button>
+                <button class="nkey" tabindex="-1" onclick="numpadInput('9','reg')">9</button>
+                <button class="nkey clr" tabindex="-1" onclick="numpadInput('clear','reg')">전체삭제</button>
+                <button class="nkey" tabindex="-1" onclick="numpadInput('0','reg')">0</button>
+                <button class="nkey del" tabindex="-1" onclick="numpadInput('del','reg')"><i
                     class="fa-solid fa-delete-left"></i></button>
               </div>
             </div>
@@ -1480,16 +1481,21 @@
       // ─────────────────────────────────────────────
       // PHONE INPUT STATE
       // ─────────────────────────────────────────────
-      let regPhone = '';
+      let regPhone = '010';
       let chkPhone = '';
       let regParty = 1;
       let addParty = 1;
 
       function numpadInput(k, mode) {
         if (mode === 'reg') {
-          if (k === 'del') regPhone = regPhone.slice(0, -1);
-          else if (k === 'clear') regPhone = '';
-          else if (regPhone.length < 11) regPhone += k;
+          if (k === 'del') {
+            // 010 이하로는 지우지 않음
+            if (regPhone.length > 3) regPhone = regPhone.slice(0, -1);
+          } else if (k === 'clear') {
+            regPhone = '010';
+          } else if (regPhone.length < 11) {
+            regPhone += k;
+          }
           updatePhoneDisp('reg-phone-disp', regPhone);
         } else {
           if (k === 'del') chkPhone = chkPhone.slice(0, -1);
@@ -1500,8 +1506,15 @@
       }
       function updatePhoneDisp(id, val) {
         const el = document.getElementById(id);
-        if (!val) { el.textContent = '번호를 입력해 주세요'; el.classList.add('empty'); return; }
+        const hintEl = id === 'reg-phone-disp' ? document.getElementById('reg-phone-hint') : null;
+        if (!val || val === '010') {
+          el.textContent = '010';
+          el.classList.remove('empty');
+          if (hintEl) hintEl.textContent = '010 다음 번호를 입력하세요';
+          return;
+        }
         el.classList.remove('empty');
+        if (hintEl) hintEl.textContent = '';
         // 010-xxxx-xxxx 형식
         let d = val;
         if (d.length > 3 && d.length <= 7) d = d.slice(0, 3) + '-' + d.slice(3);
@@ -1522,7 +1535,7 @@
         const ok = await addCustomer('', regPhone, regParty);
         if (ok) {
           toast('대기 등록이 완료되었습니다! 🎉', 'ok');
-          regPhone = ''; updatePhoneDisp('reg-phone-disp', '');
+          regPhone = '010'; updatePhoneDisp('reg-phone-disp', '010');
           regParty = 1; selectParty(1);
         }
       }
