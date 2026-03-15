@@ -1043,6 +1043,90 @@
       color: #080814;
     }
 
+    /* TABLET OPTIMIZED (768px+) */
+    @media(min-width:768px) {
+      /* 헤더 */
+      #header { padding: 14px 24px; }
+      .hd-icon { width: 52px; height: 52px; font-size: 26px; border-radius: 13px; }
+      .hd-title { font-size: 26px; }
+      .hd-sub { font-size: 14px; }
+      .hd-time { font-size: 28px; }
+      .hd-date { font-size: 13px; }
+      #waiting-msg { font-size: 18px; }
+
+      /* 폼 영역 */
+      .panel { padding: 20px; }
+      .form-h { font-size: 26px; margin-bottom: 8px; }
+      .form-hint { font-size: 16px; margin-bottom: 20px; }
+      .fl { font-size: 15px; margin-bottom: 8px; }
+      .fg { margin-bottom: 18px; }
+
+      /* 전화번호 디스플레이 */
+      .phone-disp { font-size: 28px; min-height: 62px; padding: 10px 16px; border-radius: 14px; }
+      .phone-disp.empty { font-size: 17px; }
+      #reg-phone-hint { font-size: 15px; margin-top: 8px; }
+
+      /* 숫자패드 */
+      .numpad { gap: 8px; margin-top: 10px; }
+      .nkey { padding: 18px 10px; font-size: 22px; border-radius: 14px; }
+      .nkey.clr { font-size: 15px; }
+
+      /* 인원 버튼 */
+      .party-grid { gap: 10px; }
+      .pbtn { padding: 18px 6px; font-size: 18px; border-radius: 14px; }
+
+      /* 등록 버튼 */
+      .btn-p { padding: 18px; font-size: 18px; margin-top: 14px; border-radius: 14px; }
+
+      /* 대기 현황 보드 (오른쪽 패널) */
+      .list-board { padding: 22px; }
+      .board-title { font-size: 22px; margin-bottom: 16px; }
+      .board-list { gap: 14px; }
+      .board-item { padding: 18px; border-radius: 12px; border-left-width: 5px; }
+      .bi-num { font-size: 26px; width: 50px; }
+      .bi-phone { font-size: 19px; }
+      .bi-sub { font-size: 14px; margin-top: 4px; }
+      .bi-status { padding: 6px 14px; font-size: 13px; }
+      .btn-seat-small { padding: 7px 14px; font-size: 13px; border-radius: 8px; }
+
+      /* 직원 툴바 */
+      .staff-bar { padding: 14px 24px; gap: 14px; }
+      .sbtn { padding: 14px 24px; font-size: 16px; border-radius: 14px; gap: 9px; }
+
+      /* 테이블 */
+      .tbl-wrap { padding: 20px 24px; }
+      thead th { padding: 10px 16px; font-size: 14px; }
+      tbody td { padding: 16px 16px; }
+      .qnum { width: 48px; height: 48px; font-size: 19px; }
+      .c-name { font-size: 19px; }
+      .c-phone { font-size: 15px; }
+      .party-badge { font-size: 16px; padding: 7px 14px; }
+      .wait-badge { font-size: 15px; }
+      .sbadge { font-size: 13px; padding: 7px 14px; }
+      .btn-call, .btn-seat { padding: 12px 20px; font-size: 15px; }
+      .btn-del { padding: 12px 16px; font-size: 15px; }
+
+      /* 모달 */
+      .mcard { padding: 36px; max-width: 500px; }
+      .mh { font-size: 24px; margin-bottom: 24px; }
+      .add-fi { padding: 16px 20px; font-size: 20px; margin-bottom: 18px; border-radius: 14px; }
+      .mok, .mcan { padding: 16px; font-size: 17px; border-radius: 14px; }
+      .mbtns { gap: 14px; margin-top: 26px; }
+
+      /* PIN 모달 */
+      .pin-dots { gap: 16px; margin: 24px 0; }
+      .pin-dot { width: 20px; height: 20px; }
+      .pin-numpad { gap: 14px; }
+      .pkey { padding: 22px; font-size: 26px; border-radius: 14px; }
+
+      /* 체크 결과 */
+      .chk-result { padding: 32px; margin-top: 26px; border-radius: 16px; }
+      .pos-num { font-size: 96px; }
+      .pos-lbl { font-size: 20px; }
+      .pos-wait { font-size: 24px; }
+      .pos-status { font-size: 17px; padding: 10px 20px; }
+    }
+
     /* RESPONSIVE */
     @media(max-width:900px) {
       .view {
@@ -1056,14 +1140,6 @@
     }
 
     @media(max-width:600px) {
-      .hd-stats {
-        gap: 12px;
-      }
-
-      .stat-v {
-        font-size: 22px;
-      }
-
       thead th {
         display: none;
       }
