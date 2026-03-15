@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wating-list-v1';
+const CACHE_NAME = 'wating-list-v2';
 const urlsToCache = [
   './',
   './index.html',
@@ -10,13 +10,27 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
+  // 새 서비스 워커를 즉시 활성화
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('Opened cache');
-        // 오프라인 상태에서도 기본 UI가 뜨도록 캐싱 (Firebase는 자체 offline persistence 지원)
         return cache.addAll(urlsToCache).catch(err => console.log('Caching failed', err));
       })
+  );
+});
+
+// 구버전 캐시 자동 삭제
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames
+          .filter(name => name !== CACHE_NAME)
+          .map(name => caches.delete(name))
+      );
+    }).then(() => self.clients.claim())
   );
 });
 
